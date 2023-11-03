@@ -11,4 +11,4 @@
 - Use Poetry as packaging and dependency manager
 - Add cashing (before we should test current realisation with indexing. It must work really fast)
 - Add user authentication via external service or 3rd party
-- use poetry to declare, manage and install dependencies
+- Use poetry to declare, manage and install dependencies
