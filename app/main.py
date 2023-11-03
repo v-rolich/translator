@@ -12,7 +12,7 @@ app = FastAPI(
     summary="A microservice providing an API to work with word definitions/translations taken from Google Translate.",
 )
 
-client = AsyncIOMotorClient(os.environ["MONGODB_URL"], tlsCAFile=certifi.where())
+client = AsyncIOMotorClient(os.getenv("MONGODB_URL"), tlsCAFile=certifi.where())
 db = client.words
 word_collection = db.get_collection("words")
 
