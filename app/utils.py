@@ -25,7 +25,7 @@ def translate_text(word: str, target_language: str, source_language: str = 'auto
     """
     url = "https://translation.googleapis.com/language/translate/v2"
     params = {
-        "key": os.environ["CLOUD_API_KEY"],
+        "key": os.getenv("CLOUD_API_KEY"),
         "q": word,
         "source": source_language,
         "target": target_language,
