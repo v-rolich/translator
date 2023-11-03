@@ -8,6 +8,7 @@ services:
       - db
     environment:
       MONGODB_URL: mongodb://mongo:27017/mydatabase
+      CLOUD_API_KEY: example_value
 
   db:
     image: mongo:latest
