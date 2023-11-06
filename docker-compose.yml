@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   web:
     build: .
@@ -7,12 +8,16 @@ services:
     depends_on:
       - db
     environment:
-      MONGODB_URL: mongodb://mongo:27017/mydatabase
-      CLOUD_API_KEY: example_value
+      MONGODB_URL: $MONGODB_URL
+      CLOUD_API_KEY: $CLOUD_API_KEY
 
   db:
-    image: mongo:latest
+    image: mongo
+    restart: always
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
     volumes:
       - mongodata:/data/db
