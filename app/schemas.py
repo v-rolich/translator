@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, field_validator, ConfigDict, BeforeValidator
+from pydantic import BaseModel, ConfigDict, BeforeValidator
 from typing_extensions import Annotated
 
 

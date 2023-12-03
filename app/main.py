@@ -32,7 +32,7 @@ async def get_word_details(word: str, target: str = "es", src: str = "en") -> Wo
     if word_info:
         return WordInfo(**word_info)
 
-    translated_data = fetch_and_parse_google_translate(word, target_language=target, source_language=src)
+    translated_data = await fetch_and_parse_google_translate(word, target_language=target, source_language=src)
     await word_collection.insert_one(translated_data.model_dump(by_alias=True, exclude={"name"}))
     return await word_collection.find_one({"word": word})
 
@@ -68,7 +68,7 @@ async def get_word_list(
     if query:
         filter_condition["word"] = {"$regex": query, "$options": "i"}
 
-    words_cursor = word_collection.find(filter_condition, projection).skip(skip).limit(limit)
+    words_cursor = await word_collection.find(filter_condition, projection).skip(skip).limit(limit)
     words = await words_cursor.to_list(length=limit)
     return parse_words_extraction(words, include_definitions, include_synonyms, include_examples)
 

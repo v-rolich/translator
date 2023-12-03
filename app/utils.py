@@ -1,14 +1,14 @@
 import os
-import requests
+import aiohttp
 
 from app.schemas import WordInfo
 
 
-def fetch_and_parse_google_translate(word: str, target_language: str, source_language: str) -> WordInfo:
+async def fetch_and_parse_google_translate(word: str, target_language: str, source_language: str) -> WordInfo:
     """
     Translate and parse a word.
     """
-    translations = translate_text(word, target_language, source_language)
+    translations = await translate_text(word, target_language, source_language)
     definitions, synonyms, examples = get_definitions_synonyms_examples(word, target_language, source_language)
     return WordInfo(
         word=word,
@@ -19,7 +19,7 @@ def fetch_and_parse_google_translate(word: str, target_language: str, source_lan
     )
 
 
-def translate_text(word: str, target_language: str, source_language: str = 'auto') -> list[str]:
+async def translate_text(word: str, target_language: str, source_language: str = 'auto') -> list[str]:
     """
     Translate word using the Google Cloud Translation API.
     """
@@ -31,13 +31,13 @@ def translate_text(word: str, target_language: str, source_language: str = 'auto
         "target": target_language,
         "format": "text",
     }
-    response = requests.post(url, params=params)
-
-    if response.status_code == 200:
-        translated_data = response.json().get('data', {}).get('translations', [])
-        return [translation.get("translatedText") for translation in translated_data]
-    else:
-        response.raise_for_status()
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, params=params) as response:
+            if response.status_code == 200:
+                translated_data = response.json().get('data', {}).get('translations', [])
+                return [translation.get("translatedText") for translation in translated_data]
+            else:
+                response.raise_for_status()
 
 
 def get_definitions_synonyms_examples(word: str, target_language: str, source_language: str = 'auto') -> tuple:
